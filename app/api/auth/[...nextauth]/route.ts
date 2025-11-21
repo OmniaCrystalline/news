@@ -12,17 +12,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      if (session?.user && user) {
-        (session.user as any).id = user.id;
+    async session({ session, token }) {
+      if (session?.user && token?.sub) {
+        (session.user as any).id = token.sub;
       }
       return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
     },
   },
   pages: {
     signIn: '/auth/signin',
   },
   secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true, // Дозволяє працювати з різними доменами
 });
 
 export const { GET, POST } = handlers;
