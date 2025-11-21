@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
 
 const BOT_NAME = '@бот';
 const BOT_DISPLAY_NAME = 'Бот';
-
-// Ініціалізуємо клієнт OpenRouter
-const client = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY || '',
-});
 
 export async function POST(request: Request) {
   try {
@@ -29,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     // Формуємо історію розмови для бота
-    const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
       {
         role: 'system',
         content: 'Ти корисний асистент-бот у чаті новин України. Відповідай українською мовою, бути дружнім та інформативним. Можеш допомагати з питаннями про новини, поточні події та інші теми.',
@@ -60,17 +53,32 @@ export async function POST(request: Request) {
     });
 
     // Викликаємо API OpenRouter
-    const response = await client.chat.completions.create({
-      model: 'x-ai/grok-4.1-fast:free',
-      messages: messages,
-      extra_body: {
+    // Використовуємо fetch напряму, оскільки OpenAI SDK не підтримує extra_body для OpenRouter
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+        'X-Title': 'Новини України',
+      },
+      body: JSON.stringify({
+        model: 'x-ai/grok-4.1-fast:free',
+        messages: messages,
         reasoning: {
           enabled: true,
         },
-      },
+      }),
     });
 
-    const botResponse = response.choices[0]?.message?.content || 'Вибачте, не вдалося отримати відповідь.';
+    if (!response.ok) {
+      const errorData = await response.text();
+      throw new Error(`OpenRouter API error: ${response.status} - ${errorData}`);
+    }
+
+    const data = await response.json();
+
+    const botResponse = data.choices?.[0]?.message?.content || 'Вибачте, не вдалося отримати відповідь.';
 
     return NextResponse.json({
       success: true,
