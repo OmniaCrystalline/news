@@ -24,8 +24,24 @@ export async function GET() {
     return NextResponse.json({ messages });
   } catch (error: any) {
     console.error('Помилка при отриманні повідомлень:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      meta: error.meta,
+    });
+    
+    // Якщо таблиця не існує, повертаємо порожній масив
+    if (error.code === 'P2021' || error.message?.includes('does not exist')) {
+      console.warn('Таблиця Message не існує. Переконайтеся, що міграції застосовані.');
+      return NextResponse.json({ messages: [] });
+    }
+    
     return NextResponse.json(
-      { error: 'Помилка при завантаженні повідомлень' },
+      { 
+        error: process.env.NODE_ENV === 'development' 
+          ? error.message || 'Помилка при завантаженні повідомлень'
+          : 'Помилка при завантаженні повідомлень'
+      },
       { status: 500 }
     );
   }
@@ -108,8 +124,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ message });
   } catch (error: any) {
     console.error('Помилка при створенні повідомлення:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      meta: error.meta,
+    });
+    
     return NextResponse.json(
-      { error: 'Помилка при відправці повідомлення' },
+      { 
+        error: process.env.NODE_ENV === 'development' 
+          ? error.message || 'Помилка при відправці повідомлення'
+          : 'Помилка при відправці повідомлення'
+      },
       { status: 500 }
     );
   }

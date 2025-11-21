@@ -113,13 +113,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-8">
-
-          <div className="mb-6 flex flex-wrap gap-2">
+      <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8 lg:px-8">
+        <div className="mb-6 sm:mb-8">
+          <div className="mb-4 flex flex-wrap gap-2 sm:mb-6">
             <button
               onClick={() => handleSourceChange('unian')}
-              className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${source === 'unian'
+              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm ${source === 'unian'
                 ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900'
                 : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800'
                 }`}
@@ -128,16 +127,17 @@ export default function Home() {
             </button>
             <button
               onClick={() => handleSourceChange('pravda')}
-              className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${source === 'pravda'
+              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm ${source === 'pravda'
                 ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900'
                 : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800'
                 }`}
             >
-              Українська правда
+              <span className="hidden sm:inline">Українська правда</span>
+              <span className="sm:hidden">Правда</span>
             </button>
             <button
               onClick={() => handleSourceChange('bbc')}
-              className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${source === 'bbc'
+              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm ${source === 'bbc'
                 ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900'
                 : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800'
                 }`}
@@ -146,7 +146,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => handleSourceChange('rbc')}
-              className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${source === 'rbc'
+              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm ${source === 'rbc'
                 ? 'bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900'
                 : 'bg-white text-zinc-700 hover:bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800'
                 }`}
@@ -156,9 +156,10 @@ export default function Home() {
             <button
               onClick={() => fetchNews(source, true)}
               disabled={loading}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+              className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
             >
-              {loading ? 'Завантаження...' : 'Оновити'}
+              <span className="hidden sm:inline">{loading ? 'Завантаження...' : 'Оновити'}</span>
+              <span className="sm:hidden">{loading ? '...' : '↻'}</span>
             </button>
           </div>
         </div>
@@ -191,8 +192,8 @@ export default function Home() {
           </div>
         )}
 
-        <div className="mt-12">
-          <h2 className="mb-4 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+        <div className="mt-8 sm:mt-12">
+          <h2 className="mb-4 text-xl font-bold text-zinc-900 dark:text-zinc-50 sm:text-2xl">
             Чат
           </h2>
           <Chat />

@@ -79,10 +79,14 @@ DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.[PROJECT-REF].supabase.co
 
 ## Крок 5: Налаштування на Vercel
 
+Детальні інструкції дивіться в [README_VERCEL.md](./README_VERCEL.md).
+
+**Коротко:**
 1. Перейдіть до вашого проєкту на Vercel
 2. Перейдіть до **Settings** → **Environment Variables**
-3. Додайте `DATABASE_URL` з вашим Supabase connection string
-4. Перезапустіть deployment
+3. Додайте всі необхідні змінні середовища (дивіться README_VERCEL.md)
+4. **Важливо:** Використовуйте Connection Pooling string для `DATABASE_URL` (порт 6543)
+5. Перезапустіть deployment
 
 ## Переваги Supabase
 
