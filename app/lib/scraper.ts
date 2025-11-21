@@ -45,7 +45,7 @@ export class NewsScraper {
     }
   }
 
-  private extractImage($: cheerio.CheerioAPI, articleUrl: string): string | null {
+  private extractImage($: cheerio.Root, articleUrl: string): string | null {
     // Спробуємо знайти зображення в різних місцях
     const selectors = [
       'meta[property="og:image"]',
@@ -79,7 +79,7 @@ export class NewsScraper {
     return null;
   }
 
-  private extractContent($: cheerio.CheerioAPI): string {
+  private extractContent($: cheerio.Root): string {
     // Видаляємо небажані елементи
     $('script, style, nav, header, footer, aside, .advertisement, .ads, .social-share, .comments, .related-news, .tags, .share-buttons, iframe').remove();
 
