@@ -145,7 +145,12 @@ export default function Chat() {
           setTimeout(() => {
             scrollToBottom();
           }, 200);
+        } else {
+          console.error('Помилка від бота:', data.error);
         }
+      } else {
+        const errorData = await response.json();
+        console.error('Помилка при виклику API бота:', errorData);
       }
     } catch (error) {
       console.error('Помилка при отриманні відповіді бота:', error);

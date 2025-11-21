@@ -15,8 +15,12 @@ export async function POST(request: Request) {
     }
 
     if (!process.env.OPENROUTER_API_KEY) {
+      console.error('OPENROUTER_API_KEY не налаштовано');
       return NextResponse.json(
-        { error: 'OpenRouter API ключ не налаштовано' },
+        { 
+          success: false,
+          error: 'OpenRouter API ключ не налаштовано' 
+        },
         { status: 500 }
       );
     }
@@ -54,14 +58,14 @@ export async function POST(request: Request) {
 
     // Викликаємо API OpenRouter
     // Використовуємо fetch напряму, оскільки OpenAI SDK не підтримує extra_body для OpenRouter
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+    };
+
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-        'X-Title': 'Новини України',
-      },
+      headers,
       body: JSON.stringify({
         model: 'x-ai/grok-4.1-fast:free',
         messages: messages,
@@ -86,10 +90,13 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error('Помилка при обробці запиту бота:', error);
+    console.error('Error stack:', error.stack);
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Помилка при обробці запиту бота',
+        error: process.env.NODE_ENV === 'development' 
+          ? error.message || 'Помилка при обробці запиту бота'
+          : 'Помилка при обробці запиту бота',
       },
       { status: 500 }
     );
