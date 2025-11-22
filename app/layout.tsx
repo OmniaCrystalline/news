@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     siteName: 'Новини України',
     images: [
       {
-        url: '/news-publishing-svgrepo-com.svg',
+        url: '/news_preview.webp',
         width: 800,
         height: 800,
         alt: 'Новини України',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Новини України - Актуальні новини та події',
     description: 'Актуальні новини України з найкращих джерел. Читайте останні новини та обговорюйте події в чаті.',
-    images: ['/news-publishing-svgrepo-com.svg'],
+    images: ['/news_preview.webp'],
   },
   robots: {
     index: true,
